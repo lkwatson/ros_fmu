@@ -18,9 +18,9 @@ In the following, we explain the process by the example of OpenModelica, which h
 
 ![Screenshot of the DampedPendulum model in OMEdit V1.12.0](doc/damped_pendulum_in_OMEdit.png)
 
-*   Navigate to Tools -> Options -> FMI and ensure that Version=2.0 and Type=Co-Simulation is selected.
+*   Navigate to Tools -> Options -> FMI and ensure that `Version=2.0`, `Type=Co-Simulation` and `Platforms=Dynamic` is selected.
 *   Then click FMI -> Export FMU.
-*   The path of the resulting FMU file is shown in the message browser at the bottom of the window, typically `/tmp/OpenModelica_[user]/OMEdit/DampedPendulum.fmu`
+*   The path of the resulting FMU file is shown in the message browser at the bottom of the window, typically `/tmp/OpenModelica_[user]/OMEdit/DampedPendulum.fmu`.
 
 
 ## Simulating DampedPendulum.fmu using the ros_fmu node
@@ -31,6 +31,18 @@ Once the DampedPendulum.fmu file as been created successfully, clone this reposi
 
 The ros_fmu node will load the FMU file and simulate it in real-time. The angle of the pendulum is plotted with rqt_plot:
 
-![DampedPendulum.fmu simulation results in rqt_plot](doc/damped_pendulum_in_rqt_plot.png).
+![DampedPendulum.fmu simulation results in rqt_plot](doc/damped_pendulum_in_rqt_plot.png)
 
 Please see the [README.md of the ros_fmu package](../ros_fmu/README.md) for how to load and run an FMU inside an application-specific ROS node or library.
+
+
+## Note on bug with mmc_mk_modelica_array in OpenModelica 1.12.0
+
+If the ros_fmu node crashes with the error message `undefined symbol: mmc_mk_modelica_array`, please patch the files
+
+*   /usr/include/omc/c/meta/meta_modelica.h
+*   /usr/include/omc/c/meta/meta_modelica_data.h
+
+according to [https://github.com/OpenModelica/OMCompiler/pull/2397/files](https://github.com/OpenModelica/OMCompiler/pull/2397/files) and export the FMU again.
+
+Details on this bug are given in [https://trac.openmodelica.org/OpenModelica/ticket/4899](https://trac.openmodelica.org/OpenModelica/ticket/4899).
